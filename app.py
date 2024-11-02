@@ -13,10 +13,10 @@ from string import punctuation
 tfidf = pickle.load(open("vectorizer.pkl", "rb"))
 model = pickle.load(open("model.pkl", "rb"))
 selector = pickle.load(open("selector.pkl", "rb"))
-
+from flask_cors import CORS
 # Initialize the Flask app
 app = Flask(__name__)
-
+CORS(app)
 # Download necessary NLTK resources (should be done once)
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -58,4 +58,6 @@ def predict():
         return jsonify({"message": prediction})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
