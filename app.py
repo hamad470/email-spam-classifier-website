@@ -44,8 +44,17 @@ except Exception as e:
 
 # Download necessary NLTK resources (should be done once)
 nltk.data.path.append('./nltk_data')
-nltk.download('punkt', download_dir='./nltk_data')
-nltk.download('stopwords', download_dir='./nltk_data')
+
+# Check if 'punkt' and 'stopwords' resources exist; if not, download them
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', download_dir='./nltk_data')
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords', download_dir='./nltk_data')
 
 # Define the transform_text function
 def transform_text(text):
