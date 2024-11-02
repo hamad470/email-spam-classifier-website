@@ -18,8 +18,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 # Download necessary NLTK resources (should be done once)
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk.data.path.append('./nltk_data')
+nltk.download('punkt', download_dir='./nltk_data')
+nltk.download('stopwords', download_dir='./nltk_data')
 
 # Define the transform_text function
 def transform_text(text):
@@ -59,5 +60,5 @@ def predict():
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=True, host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 8000))
+    app.run(debug=False, host="0.0.0.0", port=port)
