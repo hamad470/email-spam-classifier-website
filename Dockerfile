@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Ensure NLTK data is available
-RUN python -m nltk.downloader -d ./nltk_data punkt stopwords
+RUN python -m nltk.downloader -d ./nltk_data punkt punkt_tab stopwords
 
 # Set environment variable for Flask
 ENV FLASK_APP=app.py
