@@ -51,27 +51,33 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-    function get_data() {
-        let msg = document.getElementById("inputText").value;
-        let resElement = document.querySelector(".res");
-        let data = { "message": msg };
+   function get_data() {
+    let msg = document.getElementById("inputText").value;
+    let resElement = document.querySelector(".res");
+    let data = { "message": msg };
 
-        fetch('/predict', {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            resElement.innerHTML = data.message === "spam" ? "🚫 This message is likely spam." : "✅ This message is not spam.";
-        })
-        .catch(error => {
-            console.error(error);
-            resElement.innerHTML = ""+error;
-        });
-    }
+    fetch('https://exact-florella-hamadurrehman-a4013c71.koyeb.app/predict', {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        resElement.innerHTML = data.message === "spam" ? "🚫 This message is likely spam." : "✅ This message is not spam.";
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        resElement.innerHTML = `Error: ${error.message}`;
+    });
+}
+
     </script>
 </body>
 </html>

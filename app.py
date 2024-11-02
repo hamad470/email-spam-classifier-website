@@ -40,9 +40,12 @@ def home():
 # Define predict route for POST requests
 @app.route('/predict', methods=['POST'])
 def predict():
-    if request.method == "POST":
+    try:
         # Get message data from JSON request
         data = request.get_json()
+        if not data or "message" not in data:
+            return jsonify({"error": "Invalid input, 'message' key is missing."}), 400
+
         msg = data.get("message", "")
 
         # Preprocess the text
@@ -51,12 +54,17 @@ def predict():
         # Vectorize and select features
         vector_input = tfidf.transform([transformed_msg])
         vector_input_selected = selector.transform(vector_input)
+
         # Predict using the model
         result = model.predict(vector_input_selected)[0]
         prediction = "spam" if result == 1 else "not spam"
 
         # Return the prediction as a JSON response
         return jsonify({"message": prediction})
+    except Exception as e:
+        # Return an error message if something goes wrong
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     import os
